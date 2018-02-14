@@ -4,14 +4,14 @@ import (
 	"github.com/revel/revel"
 )
 
-type App struct {
+type Applogin struct {
 	*revel.Controller
 }
 
-func (c App) Index() revel.Result {
+func (c Applogin) Index() revel.Result {
 	return c.Render()
 }
 
-func (c App) Login(username string, password string) revel.Result {
+func (c Applogin) Login(username string, password string) revel.Result {
 	return c.Render(username, password)
 }
