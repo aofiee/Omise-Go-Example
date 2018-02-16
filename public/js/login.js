@@ -14,5 +14,16 @@ $(function() {
 		$(this).addClass('active');
 		e.preventDefault();
 	});
-
+	$('#username').val(getCookie('username'));
+	$('#password').val(getCookie('password'));
+	var remember = getCookie('remember');
+	if(remember == "on"){
+		$('#remember').prop('checked', true);
+	}
+	
 });
+
+function getCookie(key) {
+	var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+	return keyValue ? keyValue[2] : null;
+}
