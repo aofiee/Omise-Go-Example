@@ -9,7 +9,7 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 
 ### Go to http://localhost:9000/ and you'll see:
 
-![alt text](https://raw.githubusercontent.com/aofiee666/OmiseWallet/master/img/loginScreen.png)
+![alt text](https://github.com/aofiee/OmiseWallet/blob/master/public/img/loginScreen.png?raw=true)
 
 
 ## Code Layout
