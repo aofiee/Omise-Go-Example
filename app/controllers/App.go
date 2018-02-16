@@ -47,13 +47,26 @@ func (c App) Login(username string, password string, remember string) revel.Resu
 	db.Where("username = ?", username).First(&user)
 	if user.Username != "" && user.Password != "" {
 		if models.CheckPasswordHash(password, user.Password) {
-			fmt.Println(user.Username)
+			fmt.Println(user.Role)
 			if remember == "on" {
 				newCookie := &http.Cookie{Name: "rememberLogin", Value: "on"}
+				usernameCookie := &http.Cookie{Name: "username", Value: user.Username}
+				passwordCookie := &http.Cookie{Name: "password", Value: user.Password}
 				c.SetCookie(newCookie)
+				c.SetCookie(usernameCookie)
+				c.SetCookie(passwordCookie)
 			}
+			c.Session["username"] = user.Username
+			c.Session["role"] = string(user.Role)
+			return c.Redirect(Dashboard.Index)
+
+		} else {
+			c.Flash.Error("Username และ Password ไม่ถูกต้อง")
+			c.Validation.Keep()
+			c.FlashParams()
+			return c.Redirect(App.Index)
 		}
 	}
 
-	return c.Render(username, password)
+	return c.Render()
 }

@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"net/url"
 	"time"
 
 	"github.com/aofiee666/OmiseWallet/app/models"
@@ -42,4 +43,31 @@ func (t *AppTest) TestUserModel() {
 	t.AssertEqual(user.Password, "password")
 	t.AssertEqual(user.Role, 1)
 	t.AssertEqual(user.CreatedDate, ts)
+}
+
+// TestOmiseKeyModel func reciever
+func (t *AppTest) TestOmiseKeyModel() {
+	ts := time.Now()
+	omise := models.OmiseKey{
+		PublicKey:   "PublicKey",
+		SecretKey:   "SecretKey",
+		CreatedDate: ts,
+	}
+	t.AssertEqual(omise.PublicKey, "PublicKey")
+	t.AssertEqual(omise.SecretKey, "SecretKey")
+	t.AssertEqual(omise.CreatedDate, ts)
+}
+
+// TestThatLoginPageWorks func reciever
+func (t *AppTest) TestThatLoginPageWorks() {
+	t.PostForm("/Login", url.Values{"username": {"test"}, "password": {"test"}, "remember": {"on"}})
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
+}
+
+// TestThatDashboardPageWorks func reciever
+func (t *AppTest) TestThatDashboardPageWorks() {
+	t.Get("/Dashboard")
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
 }
