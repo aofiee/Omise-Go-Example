@@ -11,6 +11,8 @@ GET     /                                       App.Index
 POST    /Login                                  App.Login
 GET     /Dashboard                              Dashboard.Index
 GET     /Logout                                 Dashboard.Logout
+GET     /Publickey                              Dashboard.PublicKey
+POST    /UpdateKey                              Dashboard.UpdateKey
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
