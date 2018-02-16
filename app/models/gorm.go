@@ -57,9 +57,13 @@ func autoMigrate() {
 		user := User{
 			Username:    "admin",
 			Password:    HashPassword,
+			Role:        1, //1 = admin 0 = default
 			CreatedDate: time.Now(),
 		}
 		Gorm.Create(&user)
+	}
+	if !Gorm.HasTable(&OmiseKey{}) {
+		Gorm.AutoMigrate(&OmiseKey{})
 	}
 }
 
