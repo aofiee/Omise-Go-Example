@@ -14,6 +14,7 @@ GET     /Logout                                 Dashboard.Logout
 GET     /Publickey                              Dashboard.PublicKey
 POST    /UpdateKey                              Dashboard.UpdateKey
 GET     /DefaultBank                            Dashboard.DefaultBank
+POST    /UpdateDefaultBank                      Dashboard.UpdateDefaultBank
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

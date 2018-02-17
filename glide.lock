@@ -1,0 +1,70 @@
+hash: b2f75d467c70fb2d6ab603dec7b9386ff891ddef4f4d1c3938c892ada5751de5
+updated: 2018-02-17T11:53:19.62926+07:00
+imports:
+- name: github.com/go-sql-driver/mysql
+  version: bc14601d1bd56421dd60f561e6052c9ed77f9daf
+- name: github.com/inconshreveable/log15
+  version: 0decfc6c20d9ca0ad143b0e89dcaa20f810b4fb3
+  subpackages:
+  - term
+- name: github.com/jinzhu/gorm
+  version: 5174cc5c242a728b435ea2be8a2f7f998e15429b
+  subpackages:
+  - dialects/mysql
+- name: github.com/jinzhu/inflection
+  version: 1c35d901db3da928c72a72d8458480cc9ade058f
+- name: github.com/klauspost/compress
+  version: 5698df94daded084fa836b7df2ffbf6cbd3dd63a
+  subpackages:
+  - flate
+  - gzip
+  - zlib
+- name: github.com/klauspost/cpuid
+  version: ae832f27941af41db13bd6d8efd2493e3b22415a
+- name: github.com/mattn/go-colorable
+  version: 7dc3415be66d7cc68bf0182f35c8d31f8d2ad8a7
+- name: github.com/mattn/go-isatty
+  version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
+- name: github.com/revel/config
+  version: 662332b741dd464a886ab0901379c02b9bc5dc30
+- name: github.com/revel/log15
+  version: 793412a67da6f8d15fede4c38f5c66272478cb8a
+- name: github.com/revel/modules
+  version: f97a4d0320f4ee755526333a0286f787a5bf6d8b
+  subpackages:
+  - static/app/controllers
+  - testrunner/app
+  - testrunner/app/controllers
+- name: github.com/revel/pathtree
+  version: 41257a1839e945fce74afd070e02bab2ea2c776a
+- name: github.com/revel/revel
+  version: 07d67722d092b5f75865a332ed1a26a5f78e55e5
+  subpackages:
+  - logger
+  - testing
+- name: github.com/xeonx/timeago
+  version: 714e6695c468c22fb6431a914d8c5f9d19fa2367
+- name: golang.org/x/crypto
+  version: 650f4a345ab4e5b245a3034b110ebc7299e68186
+  subpackages:
+  - bcrypt
+  - blowfish
+- name: golang.org/x/net
+  version: 136a25c244d3019482a795d728110278d6ba09a4
+  subpackages:
+  - websocket
+- name: golang.org/x/sys
+  version: 37707fdb30a5b38865cfb95e5aab41707daec7fd
+  subpackages:
+  - unix
+- name: google.golang.org/appengine
+  version: 5bee14b453b4c71be47ec1781b0fa61c2ea182db
+  subpackages:
+  - cloudsql
+- name: gopkg.in/fsnotify.v1
+  version: c2828203cd70a50dcccfb2761f8b1f8ceef9a8e9
+- name: gopkg.in/natefinch/lumberjack.v2
+  version: a96e63847dc3c67d17befa69c303767e2f84e54f
+- name: gopkg.in/stack.v0
+  version: 9b43fcefddd0178abdabf4d484ab0d695d0011db
+testImports: []

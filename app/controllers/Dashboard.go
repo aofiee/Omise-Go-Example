@@ -92,3 +92,10 @@ func (c Dashboard) DefaultBank() revel.Result {
 
 	return c.Render(myName)
 }
+
+//UpdateDefaultBank func
+func (c Dashboard) UpdateDefaultBank() revel.Result {
+	myName := strings.Title(c.Session["username"])
+	c.ViewArgs["myName"] = myName
+	return c.RenderTemplate("Dashboard/DefaultBank.html")
+}
