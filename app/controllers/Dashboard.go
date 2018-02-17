@@ -158,7 +158,12 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 		recipient.CreatedDate = time.Now()
 		db.Save(&recipient)
 	}
-	/////////////
+	/*
+	   +----------------------------------------------------------------------+
+	   |                integrate with  omise recipient api                   |
+	   |                    return omise's recipient key                      |
+	   +----------------------------------------------------------------------+
+	*/
 	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
 	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
 	if e != nil {
@@ -189,8 +194,12 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 	recipient.OmiseID = omiseRecipient.ID
 	db.Save(&recipient)
 	fmt.Println("omise", omiseRecipient)
-
-	/////////////
+	/*
+	   +----------------------------------------------------------------------+
+	   |                integrate with  omise recipient api                   |
+	   |                    return omise's recipient key                      |
+	   +----------------------------------------------------------------------+
+	*/
 	c.ViewArgs["recipient"] = recipient
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
 }
