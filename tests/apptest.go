@@ -58,6 +58,31 @@ func (t *AppTest) TestOmiseKeyModel() {
 	t.AssertEqual(omise.CreatedDate, ts)
 }
 
+// TestRecipientModel func reciever
+func (t *AppTest) TestRecipientModel() {
+	ts := time.Now()
+	recip := models.Recipient{
+		RecipientName:     "Khomkrid Lerdprasert",
+		RecipientType:     "Individual",
+		Description:       "Test",
+		Email:             "aofiee666@gmail.com",
+		TaxID:             "1234567890",
+		BankAccountBrand:  "KBank",
+		BankAccountName:   "Khomkrid Lerdprasert",
+		BankAccountNumber: "1234567890",
+		CreatedDate:       ts,
+	}
+	t.AssertEqual(recip.RecipientName, "Khomkrid Lerdprasert")
+	t.AssertEqual(recip.RecipientType, "Individual")
+	t.AssertEqual(recip.Description, "Test")
+	t.AssertEqual(recip.Email, "aofiee666@gmail.com")
+	t.AssertEqual(recip.TaxID, "1234567890")
+	t.AssertEqual(recip.BankAccountBrand, "KBank")
+	t.AssertEqual(recip.BankAccountName, "Khomkrid Lerdprasert")
+	t.AssertEqual(recip.BankAccountNumber, "1234567890")
+	t.AssertEqual(recip.CreatedDate, ts)
+}
+
 // TestThatLoginPageWorks func reciever
 func (t *AppTest) TestThatLoginPageWorks() {
 	t.PostForm("/Login", url.Values{"username": {"test"}, "password": {"test"}, "remember": {"on"}})
@@ -68,6 +93,20 @@ func (t *AppTest) TestThatLoginPageWorks() {
 // TestThatDashboardPageWorks func reciever
 func (t *AppTest) TestThatDashboardPageWorks() {
 	t.Get("/Dashboard")
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
+}
+
+//TestPublickeyPageWorks func
+func (t *AppTest) TestPublickeyPageWorks() {
+	t.Get("/Publickey")
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
+}
+
+// TestUpdateKeyPageWorks func reciever
+func (t *AppTest) TestUpdateKeyPageWorks() {
+	t.PostForm("/UpdateKey", url.Values{"publickey": {"test"}, "secretkey": {"test"}})
 	t.AssertOk()
 	t.AssertContentType("text/html; charset=utf-8")
 }

@@ -65,6 +65,10 @@ func autoMigrate() {
 	if !Gorm.HasTable(&OmiseKey{}) {
 		Gorm.AutoMigrate(&OmiseKey{})
 	}
+
+	if !Gorm.HasTable(&Recipient{}) {
+		Gorm.AutoMigrate(&Recipient{})
+	}
 }
 
 // HashPassword func

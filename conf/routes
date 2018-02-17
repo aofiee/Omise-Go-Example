@@ -13,6 +13,7 @@ GET     /Dashboard                              Dashboard.Index
 GET     /Logout                                 Dashboard.Logout
 GET     /Publickey                              Dashboard.PublicKey
 POST    /UpdateKey                              Dashboard.UpdateKey
+GET     /DefaultBank                            Dashboard.DefaultBank
 # Ignore favicon requests
 GET     /favicon.ico                            404
 

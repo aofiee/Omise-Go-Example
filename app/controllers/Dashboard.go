@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"strings"
 	"time"
 
@@ -57,7 +56,6 @@ func (c Dashboard) PublicKey() revel.Result {
 
 // UpdateKey func
 func (c Dashboard) UpdateKey(publickey string, secretkey string) revel.Result {
-	fmt.Println(publickey, secretkey)
 	c.Validation.Required(publickey)
 	c.Validation.Required(secretkey)
 	if c.Validation.HasErrors() {
@@ -86,4 +84,11 @@ func (c Dashboard) UpdateKey(publickey string, secretkey string) revel.Result {
 	c.ViewArgs["publickey"] = publickey
 	c.ViewArgs["secretkey"] = secretkey
 	return c.RenderTemplate("Dashboard/PublicKey.html")
+}
+
+//DefaultBank func
+func (c Dashboard) DefaultBank() revel.Result {
+	myName := strings.Title(c.Session["username"])
+
+	return c.Render(myName)
 }
