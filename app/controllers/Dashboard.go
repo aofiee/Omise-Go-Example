@@ -89,13 +89,60 @@ func (c Dashboard) UpdateKey(publickey string, secretkey string) revel.Result {
 //DefaultBank func
 func (c Dashboard) DefaultBank() revel.Result {
 	myName := strings.Title(c.Session["username"])
+	db := models.Gorm
+	var recipient models.Recipient
+	db.Where("is_default = 1").First(&recipient)
 
-	return c.Render(myName)
+	return c.Render(myName, recipient)
 }
 
 //UpdateDefaultBank func
-func (c Dashboard) UpdateDefaultBank() revel.Result {
+func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string, taxid string, description string, bankaccountbrand string, bankaccountname string, bankaccountnumber string) revel.Result {
 	myName := strings.Title(c.Session["username"])
 	c.ViewArgs["myName"] = myName
+	c.Validation.Required(optradio)
+	c.Validation.Required(email)
+	c.Validation.Required(name)
+	c.Validation.Required(taxid)
+	c.Validation.Required(description)
+	c.Validation.Required(bankaccountbrand)
+	c.Validation.Required(bankaccountname)
+	c.Validation.Required(bankaccountnumber)
+	if c.Validation.HasErrors() {
+		c.Flash.Error("กรุณากรอกข้อมูลให้ครบด้วยครับ")
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(Dashboard.DefaultBank)
+	}
+	db := models.Gorm
+	var recipient models.Recipient
+	db.Where("is_default = 1").First(&recipient)
+	if recipient.ID == 0 {
+		db.FirstOrCreate(&recipient, models.Recipient{
+			RecipientName:     name,
+			Description:       description,
+			Email:             email,
+			RecipientType:     optradio,
+			TaxID:             taxid,
+			BankAccountBrand:  bankaccountbrand,
+			BankAccountName:   bankaccountname,
+			BankAccountNumber: bankaccountnumber,
+			IsDefault:         1,
+			CreatedDate:       time.Now(),
+		})
+	} else {
+		recipient.RecipientName = name
+		recipient.Description = description
+		recipient.Email = email
+		recipient.RecipientType = optradio
+		recipient.TaxID = taxid
+		recipient.BankAccountBrand = bankaccountbrand
+		recipient.BankAccountName = bankaccountname
+		recipient.BankAccountNumber = bankaccountnumber
+		recipient.IsDefault = 1
+		recipient.CreatedDate = time.Now()
+		db.Save(&recipient)
+	}
+	c.ViewArgs["recipient"] = recipient
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
 }

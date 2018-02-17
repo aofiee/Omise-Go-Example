@@ -14,5 +14,6 @@ type Recipient struct {
 	BankAccountBrand  string
 	BankAccountNumber string
 	BankAccountName   string
+	IsDefault         int
 	CreatedDate       time.Time
 }

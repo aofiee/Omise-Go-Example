@@ -17,3 +17,5 @@ import:
 - package: golang.org/x/crypto
   subpackages:
   - bcrypt
+- package: github.com/omise/omise-go
+  version: ^2016.0.0-04-02

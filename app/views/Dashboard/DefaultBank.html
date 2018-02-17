@@ -3,36 +3,36 @@
     <div class="container-fluid">
         <div class="side-body">
            <h1> Default Bank </h1>
+           <div class="p-3 mb-2 bg-danger text-white">{{.flash.error}}</div>
            <div class="form-group">
                 <label class="control-label col-sm-2" for="email">Recipient Infomations</label>
                 <div class="col-sm-10">
                   <p class="form-control-static"></p>
                 </div>
             </div>
-           <div class="p-3 mb-2 bg-danger text-white">{{.flash.error}}</div>
            <form id="login-form" action="/UpdateDefaultBank" method="post" role="form" style="display: block;">
            <div class="form-group">
                 <div class="radio">
-                        <label class="radio-inline"><input type="radio" name="optradio">Corporation</label>
-                        <label class="radio-inline"><input type="radio" name="optradio" checked>Individual</label>
+                        <label class="radio-inline"><input type="radio" name="optradio" id="optradio1" value="corporation">Corporation</label>
+                        <label class="radio-inline"><input type="radio" name="optradio" id="optradio2" value="individual" checked>Individual</label>
                 </div>
            </div>
            <div class="form-group">
                 <label for="usr">Name:</label>
-                <input type="text" class="form-control" id="name" name="name" value="{{.name}}">
+                <input type="text" class="form-control" id="name" name="name" value="{{.recipient.RecipientName}}">
             </div>
             <div class="form-group">
                 <label for="pwd">Email:</label>
-                <input type="text" class="form-control" id="email" name="email" value="{{.email}}">
+                <input type="text" class="form-control" id="email" name="email" value="{{.recipient.Email}}">
             </div>
             <div class="form-group">
                     <label for="pwd">TaxID:</label>
-                    <input type="text" class="form-control" id="taxid" name="taxid" value="{{.taxid}}">
+                    <input type="text" class="form-control" id="taxid" name="taxid" value="{{.recipient.TaxID}}">
                     <div>Not apply to merchants registered in Japan</div>
             </div>
             <div class="form-group">
                     <label for="pwd">Description:</label>
-                    <input type="text" class="form-control" id="description" name="description" value="{{.description}}">
+                    <input type="text" class="form-control" id="description" name="description" value="{{.recipient.Description}}">
             </div>
             <div class="form-group">
                     <label class="control-label col-sm-2" for="email">Bank account Infomations</label>
@@ -41,8 +41,8 @@
                     </div>
             </div>
             <div class="form-group">
-                    <label for="sel1">Select list:</label>
-                    <select class="form-control" id="sel1" name="bankaccountbrand">
+                    <label for="bankaccountbrand">Select list:</label>
+                    <select class="form-control" id="bankaccountbrand" name="bankaccountbrand">
                         <option value="test">TEST - Test Bank</option>
                         <option value="bbl">BBL - Bangkok Bank</option>
                         <option value="kbank">KBANK - Kasikornbank</option>
@@ -77,13 +77,24 @@
                         <option value="lhb">LHB - Land and Houses Bank</option>
                     </select>
             </div>
+            <script>
+            $(function () {
+                $('#bankaccountbrand option[value={{.recipient.BankAccountBrand}}]').attr('selected','selected');
+                var RecipientType = "{{.recipient.RecipientType}}";
+                if(RecipientType == "individual"){
+                    $('#optradio2').attr('checked','checked');
+                }else{
+                    $('#optradio1').attr('checked','checked');
+                }
+            })
+            </script>
             <div class="form-group">
                     <label for="usr">Name:</label>
-                    <input type="text" class="form-control" id="bankaccountname" name="bankaccountname" value="{{.bankaccountname}}">
+                    <input type="text" class="form-control" id="bankaccountname" name="bankaccountname" value="{{.recipient.BankAccountName}}">
             </div>
             <div class="form-group">
                     <label for="usr">Number:</label>
-                    <input type="text" class="form-control" id="bankaccountnumber" name="bankaccountnumber" value="{{.bankaccountnumber}}">
+                    <input type="text" class="form-control" id="bankaccountnumber" name="bankaccountnumber" value="{{.recipient.BankAccountNumber}}">
             </div>
             <input type="submit" class="btn btn-info" value="Save Button">
             </form>

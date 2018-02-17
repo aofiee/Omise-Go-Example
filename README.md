@@ -2,6 +2,11 @@
 
 A high-productivity web framework for the [Go language](http://www.golang.org/).
 
+### Reproducible Installations
+Install the dependencies and revisions listed in the lock file into the vendor directory. If no lock file exists an update is run.
+
+$ glide install
+
 
 ### Start the web server:
 

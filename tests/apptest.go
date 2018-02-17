@@ -70,6 +70,7 @@ func (t *AppTest) TestRecipientModel() {
 		BankAccountBrand:  "KBank",
 		BankAccountName:   "Khomkrid Lerdprasert",
 		BankAccountNumber: "1234567890",
+		IsDefault:         1,
 		CreatedDate:       ts,
 	}
 	t.AssertEqual(recip.RecipientName, "Khomkrid Lerdprasert")
@@ -80,6 +81,7 @@ func (t *AppTest) TestRecipientModel() {
 	t.AssertEqual(recip.BankAccountBrand, "KBank")
 	t.AssertEqual(recip.BankAccountName, "Khomkrid Lerdprasert")
 	t.AssertEqual(recip.BankAccountNumber, "1234567890")
+	t.AssertEqual(recip.IsDefault, "1")
 	t.AssertEqual(recip.CreatedDate, ts)
 }
 
