@@ -4,6 +4,7 @@ import (
 	"time"
 )
 
+//Recipient struct
 type Recipient struct {
 	ID                int16
 	RecipientName     string
@@ -15,5 +16,6 @@ type Recipient struct {
 	BankAccountNumber string
 	BankAccountName   string
 	IsDefault         int
+	OmiseID           string
 	CreatedDate       time.Time
 }

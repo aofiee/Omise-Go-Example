@@ -19,3 +19,5 @@ import:
   - bcrypt
 - package: github.com/omise/omise-go
   version: ^2016.0.0-04-02
+- package: github.com/fatih/color
+  version: ^1.6.0

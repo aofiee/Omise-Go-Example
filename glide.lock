@@ -1,6 +1,8 @@
-hash: ba71ab290d08b431df9c454f39d23738990d3042fc6e3a7b008f5d21873da5f6
-updated: 2018-02-17T12:06:05.822003+07:00
+hash: 6a4ca255d25a74b05a000e966df2c314fc08dcbbfc4c8d0d373ec22570553e85
+updated: 2018-02-17T16:41:25.335844+07:00
 imports:
+- name: github.com/fatih/color
+  version: 507f6050b8568533fb3f5504de8e5205fa62a114
 - name: github.com/go-sql-driver/mysql
   version: bc14601d1bd56421dd60f561e6052c9ed77f9daf
 - name: github.com/inconshreveable/log15
@@ -27,6 +29,10 @@ imports:
   version: 6ca4dbf54d38eea1a992b3c722a76a5d1c4cb25c
 - name: github.com/omise/omise-go
   version: e0614592e7b281048c59f2ae8e3c5b827a17d198
+  subpackages:
+  - internal
+  - internal/creds
+  - operations
 - name: github.com/revel/config
   version: 662332b741dd464a886ab0901379c02b9bc5dc30
 - name: github.com/revel/log15

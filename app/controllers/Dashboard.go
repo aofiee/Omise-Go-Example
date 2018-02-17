@@ -1,10 +1,14 @@
 package controllers
 
 import (
+	"fmt"
+	"log"
 	"strings"
 	"time"
 
 	"github.com/aofiee666/OmiseWallet/app/models"
+	omise "github.com/omise/omise-go"
+	"github.com/omise/omise-go/operations"
 
 	"github.com/revel/revel"
 )
@@ -22,6 +26,8 @@ var (
 // Index method
 func (c Dashboard) Index() revel.Result {
 	myName := strings.Title(c.Session["username"])
+	p, s := getPublicAndSecretKey()
+	fmt.Println(p, s)
 	return c.Render(myName)
 }
 
@@ -32,6 +38,15 @@ func (c Dashboard) checkUser() revel.Result {
 		return c.Redirect(App.Index)
 	}
 	return nil
+}
+
+func getPublicAndSecretKey() (publickey string, secretkey string) {
+	db := models.Gorm
+	var omiseKey models.OmiseKey
+	db.First(&omiseKey)
+	publickey = omiseKey.PublicKey
+	secretkey = omiseKey.SecretKey
+	return
 }
 
 //Logout func
@@ -45,7 +60,7 @@ func (c Dashboard) Logout() revel.Result {
 
 // PublicKey func
 func (c Dashboard) PublicKey() revel.Result {
-	myName := strings.Title(c.Session["username"])
+	// myName := strings.Title(c.Session["username"])
 	db := models.Gorm
 	var omise models.OmiseKey
 	db.First(&omise)
@@ -143,6 +158,39 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 		recipient.CreatedDate = time.Now()
 		db.Save(&recipient)
 	}
+	/////////////
+	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
+	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
+	if e != nil {
+		log.Fatal(e)
+	}
+	var typeBank omise.RecipientType
+	if optradio == "individual" {
+		typeBank = "individual"
+	} else {
+		typeBank = "corporation"
+	}
+
+	omiseRecipient, createRecipient := &omise.Recipient{}, &operations.CreateRecipient{
+		Name:        name,
+		Email:       email,
+		Description: description,
+		TaxID:       taxid,
+		Type:        typeBank,
+		BankAccount: &omise.BankAccount{
+			Brand:  bankaccountbrand,
+			Number: bankaccountnumber,
+			Name:   bankaccountname,
+		},
+	}
+	if e := client.Do(omiseRecipient, createRecipient); e != nil {
+		log.Fatal(e)
+	}
+	recipient.OmiseID = omiseRecipient.ID
+	db.Save(&recipient)
+	fmt.Println("omise", omiseRecipient)
+
+	/////////////
 	c.ViewArgs["recipient"] = recipient
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
 }
