@@ -174,6 +174,8 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 	c.ViewArgs["recipient"] = recipient
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
 }
+
+//recipientSaveInOmise func for run go
 func recipientSaveInOmise(recipient models.Recipient) bool {
 	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
 	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
