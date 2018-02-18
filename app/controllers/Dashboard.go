@@ -26,7 +26,9 @@ var (
 // Index method
 func (c Dashboard) Index() revel.Result {
 	myName := strings.Title(c.Session["username"])
-	p, s := getPublicAndSecretKey()
+
+	var d Dashboard
+	p, s := d.getPublicAndSecretKey()
 	fmt.Println(p, s)
 	return c.Render(myName)
 }
@@ -38,15 +40,6 @@ func (c Dashboard) checkUser() revel.Result {
 		return c.Redirect(App.Index)
 	}
 	return nil
-}
-
-func getPublicAndSecretKey() (publickey string, secretkey string) {
-	db := models.Gorm
-	var omiseKey models.OmiseKey
-	db.First(&omiseKey)
-	publickey = omiseKey.PublicKey
-	secretkey = omiseKey.SecretKey
-	return
 }
 
 //Logout func
@@ -170,8 +163,19 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 		recipient.IsDefault = 1
 		recipient.CreatedDate = time.Now()
 		db.Save(&recipient)
-
+		/*
+		   +----------------------------------------------------------------------+
+		   |                integrate with  omise recipient api                   |
+		   |                    return omise's recipient key                      |
+		   +----------------------------------------------------------------------+
+		*/
 		go recipientUpdateInOmise(recipient)
+		/*
+		   +----------------------------------------------------------------------+
+		   |                integrate with  omise recipient api                   |
+		   |                    return omise's recipient key                      |
+		   +----------------------------------------------------------------------+
+		*/
 	}
 	c.Flash.Success("Completed...")
 	c.ViewArgs["recipient"] = recipient
@@ -180,7 +184,8 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 
 //recipientUpdateInOmise func for run go
 func recipientUpdateInOmise(recipient models.Recipient) bool {
-	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
+	var d Dashboard
+	OmisePublicKey, OmiseSecretKey := d.getPublicAndSecretKey()
 	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
 	if e != nil {
 		log.Fatal(e)
@@ -188,9 +193,9 @@ func recipientUpdateInOmise(recipient models.Recipient) bool {
 	}
 	var typeBank omise.RecipientType
 	if recipient.RecipientType == "individual" {
-		typeBank = "individual"
+		typeBank = omise.Individual
 	} else {
-		typeBank = "corporation"
+		typeBank = omise.Corporation
 	}
 	omiseRecipient, updateRecipient := &omise.Recipient{}, &operations.UpdateRecipient{
 		RecipientID: recipient.OmiseID,
@@ -219,7 +224,8 @@ func recipientUpdateInOmise(recipient models.Recipient) bool {
 
 //recipientSaveInOmise func for run go
 func recipientSaveInOmise(recipient models.Recipient) bool {
-	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
+	var d Dashboard
+	OmisePublicKey, OmiseSecretKey := d.getPublicAndSecretKey()
 	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
 	if e != nil {
 		log.Fatal(e)
@@ -227,9 +233,9 @@ func recipientSaveInOmise(recipient models.Recipient) bool {
 	}
 	var typeBank omise.RecipientType
 	if recipient.RecipientType == "individual" {
-		typeBank = "individual"
+		typeBank = omise.Individual
 	} else {
-		typeBank = "corporation"
+		typeBank = omise.Corporation
 	}
 
 	omiseRecipient, createRecipient := &omise.Recipient{}, &operations.CreateRecipient{
@@ -259,5 +265,64 @@ func recipientSaveInOmise(recipient models.Recipient) bool {
 
 //ListAllRecipient func
 func (c Dashboard) ListAllRecipient() revel.Result {
-	return c.Render()
+	myName := strings.Title(c.Session["username"])
+	/*
+	   +------------------------------------------------------------------------------+
+	   |                                                                              |
+	   |                 integrate with  omise list recipient api                     |
+	   |                                                                              |
+	   +------------------------------------------------------------------------------+
+	*/
+	recipients := listRecipient()
+	/*
+	   +------------------------------------------------------------------------------+
+	   |                                                                              |
+	   |                 integrate with  omise list recipient api                     |
+	   |                                                                              |
+	   +------------------------------------------------------------------------------+
+	*/
+	var sliceRecipient []*omise.Recipient
+
+	for _, item := range recipients.Data {
+		sliceRecipient = append(sliceRecipient, item)
+	}
+	fmt.Println(sliceRecipient)
+	return c.Render(myName, sliceRecipient)
+}
+
+func listRecipient() (omiseRecipient omise.RecipientList) {
+	/*
+	   +------------------------------------------------------------------------------+
+	   |                                                                              |
+	   |                 integrate with  omise list recipient api                     |
+	   |                                                                              |
+	   +------------------------------------------------------------------------------+
+	*/
+	var d Dashboard
+	OmisePublicKey, OmiseSecretKey := d.getPublicAndSecretKey()
+	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
+	if e != nil {
+		log.Fatal(e)
+		return omiseRecipient
+	}
+
+	recipients, listRecipients := &omise.RecipientList{}, &operations.ListRecipients{
+		List: operations.List{
+			Offset: 0,
+			Limit:  10,
+		},
+	}
+	if e := client.Do(recipients, listRecipients); e != nil {
+		log.Fatal(e)
+		return omiseRecipient
+	}
+	omiseRecipient = *recipients
+	/*
+	   +------------------------------------------------------------------------------+
+	   |                                                                              |
+	   |                 integrate with  omise list recipient api                     |
+	   |                                                                              |
+	   +------------------------------------------------------------------------------+
+	*/
+	return omiseRecipient
 }

@@ -139,3 +139,13 @@ func (c App) Login(username string, password string, remember string) revel.Resu
 
 	return c.Render()
 }
+
+//getPublicAndSecretKey func
+func (c App) getPublicAndSecretKey() (publickey string, secretkey string) {
+	db := models.Gorm
+	var omiseKey models.OmiseKey
+	db.First(&omiseKey)
+	publickey = omiseKey.PublicKey
+	secretkey = omiseKey.SecretKey
+	return publickey, secretkey
+}

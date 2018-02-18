@@ -4,6 +4,7 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/aofiee666/OmiseWallet/app/controllers"
 	"github.com/aofiee666/OmiseWallet/app/models"
 	"github.com/revel/revel/testing"
 )
@@ -11,6 +12,7 @@ import (
 // AppTest struct
 type AppTest struct {
 	testing.TestSuite
+	controllers.App
 }
 
 // Before func reciever
@@ -71,6 +73,7 @@ func (t *AppTest) TestRecipientModel() {
 		BankAccountName:   "Khomkrid Lerdprasert",
 		BankAccountNumber: "1234567890",
 		IsDefault:         1,
+		OmiseID:           "text",
 		CreatedDate:       ts,
 	}
 	t.AssertEqual(recip.RecipientName, "Khomkrid Lerdprasert")
@@ -81,7 +84,8 @@ func (t *AppTest) TestRecipientModel() {
 	t.AssertEqual(recip.BankAccountBrand, "KBank")
 	t.AssertEqual(recip.BankAccountName, "Khomkrid Lerdprasert")
 	t.AssertEqual(recip.BankAccountNumber, "1234567890")
-	t.AssertEqual(recip.IsDefault, "1")
+	t.AssertEqual(recip.IsDefault, 1)
+	t.AssertEqual(recip.OmiseID, "text")
 	t.AssertEqual(recip.CreatedDate, ts)
 }
 
@@ -109,6 +113,20 @@ func (t *AppTest) TestPublickeyPageWorks() {
 // TestUpdateKeyPageWorks func reciever
 func (t *AppTest) TestUpdateKeyPageWorks() {
 	t.PostForm("/UpdateKey", url.Values{"publickey": {"test"}, "secretkey": {"test"}})
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
+}
+
+//TestBankDefaultPageWorks func
+func (t *AppTest) TestBankDefaultPageWorks() {
+	t.Get("/DefaultBank")
+	t.AssertOk()
+	t.AssertContentType("text/html; charset=utf-8")
+}
+
+//TestUpdateBankDefaultPageWorks func
+func (t *AppTest) TestUpdateBankDefaultPageWorks() {
+	t.PostForm("/UpdateDefaultBank", url.Values{"optradio": {"test"}, "name": {"test"}, "email": {"test"}, "taxid": {"test"}, "description": {"test"}, "bankaccountbrand": {"test"}, "bankaccountname": {"test"}, "bankaccountnumber": {"test"}})
 	t.AssertOk()
 	t.AssertContentType("text/html; charset=utf-8")
 }
