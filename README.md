@@ -14,6 +14,10 @@ $ glide install
 
 ### Go to http://localhost:9000/ and you'll see:
 
+| Username     | Password    |
+| -------------|-------------|
+| admin        | password    |
+
 ![alt text](https://github.com/aofiee/OmiseWallet/blob/master/public/img/loginScreen.png?raw=true)
 
 
