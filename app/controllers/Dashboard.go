@@ -217,7 +217,7 @@ func recipientUpdateInOmise(recipient models.Recipient) bool {
 	}
 	db := models.Gorm
 	var recipientDB models.Recipient
-	db.Where("is_default = 1").First(&recipientDB)
+	db.Where("id = ?", recipient.ID).First(&recipientDB)
 	recipientDB.OmiseID = omiseRecipient.ID
 	db.Save(&recipient)
 	return true
