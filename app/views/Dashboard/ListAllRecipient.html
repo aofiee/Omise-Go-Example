@@ -4,6 +4,7 @@
 <div class="container">
     <h2>List All Recipient</h2>
     <p>สายลม version นั่งเล่น หน้าบ้าน</p>            
+    <button type="button" id="newRecipient" class="btn btn-primary">New Recipient</button>
     <table class="table table-condensed">
         <thead>
         <tr>
@@ -31,4 +32,11 @@
         </tbody>
     </table>
 </div>
+<script>
+$(function(){
+    $('#newRecipient').click(function() {
+    window.location = "/NewRecipientForm";
+    });
+})
+</script>
 {{template "footer.html" .}}

@@ -100,8 +100,8 @@ func (c Dashboard) DefaultBank() revel.Result {
 	db := models.Gorm
 	var recipient models.Recipient
 	db.Where("is_default = 1").First(&recipient)
-
-	return c.Render(myName, recipient)
+	actionURL := "UpdateDefaultBank"
+	return c.Render(myName, recipient, actionURL)
 }
 
 //UpdateDefaultBank func
@@ -179,6 +179,7 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 	}
 	c.Flash.Success("Completed...")
 	c.ViewArgs["recipient"] = recipient
+	c.ViewArgs["actionURL"] = "UpdateDefaultBank"
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
 }
 
@@ -256,7 +257,7 @@ func recipientSaveInOmise(recipient models.Recipient) bool {
 	}
 	db := models.Gorm
 	var recipientDB models.Recipient
-	db.Where("is_default = 1").First(&recipientDB)
+	db.Where("id = ?", recipient.ID).First(&recipientDB)
 	recipientDB.OmiseID = omiseRecipient.ID
 	db.Save(&recipientDB)
 	fmt.Println("omise", omiseRecipient)
@@ -325,4 +326,74 @@ func listRecipient() (omiseRecipient omise.RecipientList) {
 	   +------------------------------------------------------------------------------+
 	*/
 	return omiseRecipient
+}
+
+//NewRecipientForm func
+func (c Dashboard) NewRecipientForm() revel.Result {
+	myName := strings.Title(c.Session["username"])
+	c.ViewArgs["myName"] = myName
+	c.ViewArgs["actionURL"] = "SaveNewRecipient"
+	return c.RenderTemplate("Dashboard/DefaultBank.html")
+}
+
+//SaveNewRecipient func
+func (c Dashboard) SaveNewRecipient(optradio string, name string, email string, taxid string, description string, bankaccountbrand string, bankaccountname string, bankaccountnumber string) revel.Result {
+	myName := strings.Title(c.Session["username"])
+	/*
+	   +------------------------------------------------------------------------------+
+	   |                                                                              |
+	   |                             Validate Form Data                               |
+	   |                                                                              |
+	   +------------------------------------------------------------------------------+
+	*/
+	c.Validation.Required(optradio)
+	c.Validation.Required(email)
+	c.Validation.Required(name)
+	c.Validation.Required(taxid)
+	c.Validation.Required(description)
+	c.Validation.Required(bankaccountbrand)
+	c.Validation.Required(bankaccountname)
+	c.Validation.Required(bankaccountnumber)
+	if c.Validation.HasErrors() {
+		c.Flash.Error("กรุณากรอกข้อมูลให้ครบด้วยครับ")
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect(Dashboard.DefaultBank)
+	}
+	/*
+	   +------------------------------------------------------------------------------+
+	   |                                                                              |
+	   |                             Validate Form Data                               |
+	   |                                                                              |
+	   +------------------------------------------------------------------------------+
+	*/
+	db := models.Gorm
+	var recipient models.Recipient
+	recipient.RecipientName = name
+	recipient.Description = description
+	recipient.Email = email
+	recipient.RecipientType = optradio
+	recipient.TaxID = taxid
+	recipient.BankAccountBrand = bankaccountbrand
+	recipient.BankAccountName = bankaccountname
+	recipient.BankAccountNumber = bankaccountnumber
+	recipient.IsDefault = 0
+	recipient.CreatedDate = time.Now()
+	db.Save(&recipient)
+	/*
+		+----------------------------------------------------------------------+
+		|                integrate with  omise recipient api                   |
+		|                    return omise's recipient key                      |
+		+----------------------------------------------------------------------+
+	*/
+	go recipientSaveInOmise(recipient)
+	/*
+		+----------------------------------------------------------------------+
+		|                integrate with  omise recipient api                   |
+		|                    return omise's recipient key                      |
+		+----------------------------------------------------------------------+
+	*/
+	c.ViewArgs["myName"] = myName
+	c.ViewArgs["actionURL"] = "SaveNewRecipient"
+	return c.Redirect("/ListAllRecipient")
 }

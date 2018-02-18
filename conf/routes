@@ -16,6 +16,8 @@ POST    /UpdateKey                              Dashboard.UpdateKey
 GET     /DefaultBank                            Dashboard.DefaultBank
 POST    /UpdateDefaultBank                      Dashboard.UpdateDefaultBank
 GET     /ListAllRecipient                       Dashboard.ListAllRecipient
+GET     /NewRecipientForm                       Dashboard.NewRecipientForm
+POST    /SaveNewRecipient                       Dashboard.SaveNewRecipient
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
