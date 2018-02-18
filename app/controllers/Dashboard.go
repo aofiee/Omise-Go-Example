@@ -164,36 +164,7 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 	   |                    return omise's recipient key                      |
 	   +----------------------------------------------------------------------+
 	*/
-	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
-	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
-	if e != nil {
-		log.Fatal(e)
-	}
-	var typeBank omise.RecipientType
-	if optradio == "individual" {
-		typeBank = "individual"
-	} else {
-		typeBank = "corporation"
-	}
-
-	omiseRecipient, createRecipient := &omise.Recipient{}, &operations.CreateRecipient{
-		Name:        name,
-		Email:       email,
-		Description: description,
-		TaxID:       taxid,
-		Type:        typeBank,
-		BankAccount: &omise.BankAccount{
-			Brand:  bankaccountbrand,
-			Number: bankaccountnumber,
-			Name:   bankaccountname,
-		},
-	}
-	if e := client.Do(omiseRecipient, createRecipient); e != nil {
-		log.Fatal(e)
-	}
-	recipient.OmiseID = omiseRecipient.ID
-	db.Save(&recipient)
-	fmt.Println("omise", omiseRecipient)
+	go recipientSaveInOmise(recipient)
 	/*
 	   +----------------------------------------------------------------------+
 	   |                integrate with  omise recipient api                   |
@@ -202,4 +173,45 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 	*/
 	c.ViewArgs["recipient"] = recipient
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
+}
+func recipientSaveInOmise(recipient models.Recipient) bool {
+	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
+	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
+	if e != nil {
+		log.Fatal(e)
+	}
+	var typeBank omise.RecipientType
+	if recipient.RecipientType == "individual" {
+		typeBank = "individual"
+	} else {
+		typeBank = "corporation"
+	}
+
+	omiseRecipient, createRecipient := &omise.Recipient{}, &operations.CreateRecipient{
+		Name:        recipient.RecipientName,
+		Email:       recipient.Email,
+		Description: recipient.Description,
+		TaxID:       recipient.TaxID,
+		Type:        typeBank,
+		BankAccount: &omise.BankAccount{
+			Brand:  recipient.BankAccountBrand,
+			Number: recipient.BankAccountNumber,
+			Name:   recipient.BankAccountName,
+		},
+	}
+	if e := client.Do(omiseRecipient, createRecipient); e != nil {
+		log.Fatal(e)
+	}
+	db := models.Gorm
+	var recipientDB models.Recipient
+	db.Where("is_default = 1").First(&recipientDB)
+	recipientDB.OmiseID = omiseRecipient.ID
+	db.Save(&recipientDB)
+	fmt.Println("omise", omiseRecipient)
+	return true
+}
+
+//ListAllRecipient func
+func (c Dashboard) ListAllRecipient() revel.Result {
+	return c.Render()
 }
