@@ -145,6 +145,19 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 			IsDefault:         1,
 			CreatedDate:       time.Now(),
 		})
+		/*
+		   +----------------------------------------------------------------------+
+		   |                integrate with  omise recipient api                   |
+		   |                    return omise's recipient key                      |
+		   +----------------------------------------------------------------------+
+		*/
+		go recipientSaveInOmise(recipient)
+		/*
+		   +----------------------------------------------------------------------+
+		   |                integrate with  omise recipient api                   |
+		   |                    return omise's recipient key                      |
+		   +----------------------------------------------------------------------+
+		*/
 	} else {
 		recipient.RecipientName = name
 		recipient.Description = description
@@ -157,22 +170,51 @@ func (c Dashboard) UpdateDefaultBank(optradio string, name string, email string,
 		recipient.IsDefault = 1
 		recipient.CreatedDate = time.Now()
 		db.Save(&recipient)
+
+		go recipientUpdateInOmise(recipient)
 	}
-	/*
-	   +----------------------------------------------------------------------+
-	   |                integrate with  omise recipient api                   |
-	   |                    return omise's recipient key                      |
-	   +----------------------------------------------------------------------+
-	*/
-	go recipientSaveInOmise(recipient)
-	/*
-	   +----------------------------------------------------------------------+
-	   |                integrate with  omise recipient api                   |
-	   |                    return omise's recipient key                      |
-	   +----------------------------------------------------------------------+
-	*/
+	c.Flash.Success("Completed...")
 	c.ViewArgs["recipient"] = recipient
 	return c.RenderTemplate("Dashboard/DefaultBank.html")
+}
+
+//recipientUpdateInOmise func for run go
+func recipientUpdateInOmise(recipient models.Recipient) bool {
+	OmisePublicKey, OmiseSecretKey := getPublicAndSecretKey()
+	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
+	if e != nil {
+		log.Fatal(e)
+		return false
+	}
+	var typeBank omise.RecipientType
+	if recipient.RecipientType == "individual" {
+		typeBank = "individual"
+	} else {
+		typeBank = "corporation"
+	}
+	omiseRecipient, updateRecipient := &omise.Recipient{}, &operations.UpdateRecipient{
+		RecipientID: recipient.OmiseID,
+		Name:        recipient.RecipientName,
+		Email:       recipient.Email,
+		Description: recipient.Description,
+		Type:        typeBank,
+		TaxID:       recipient.TaxID,
+		BankAccount: &omise.BankAccount{
+			Brand:  recipient.BankAccountBrand,
+			Number: recipient.BankAccountNumber,
+			Name:   recipient.BankAccountName,
+		},
+	}
+	if e := client.Do(omiseRecipient, updateRecipient); e != nil {
+		log.Fatal(e)
+		return false
+	}
+	db := models.Gorm
+	var recipientDB models.Recipient
+	db.Where("is_default = 1").First(&recipientDB)
+	recipientDB.OmiseID = omiseRecipient.ID
+	db.Save(&recipient)
+	return true
 }
 
 //recipientSaveInOmise func for run go
@@ -181,6 +223,7 @@ func recipientSaveInOmise(recipient models.Recipient) bool {
 	client, e := omise.NewClient(OmisePublicKey, OmiseSecretKey)
 	if e != nil {
 		log.Fatal(e)
+		return false
 	}
 	var typeBank omise.RecipientType
 	if recipient.RecipientType == "individual" {
@@ -203,6 +246,7 @@ func recipientSaveInOmise(recipient models.Recipient) bool {
 	}
 	if e := client.Do(omiseRecipient, createRecipient); e != nil {
 		log.Fatal(e)
+		return false
 	}
 	db := models.Gorm
 	var recipientDB models.Recipient
