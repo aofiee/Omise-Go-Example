@@ -18,7 +18,8 @@ docker run --rm -it -v $(pwd):/go/src/omise-go -w /go/src/omise-go instrumentist
 ### Start the web server:
 
 ```
-revel run github.com/aofiee666/OmiseWallet
+docker-compose build
+docker-compose up -d
 ```
 
 ### Go to http://localhost:9000/ and you'll see:
