@@ -4,8 +4,8 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/aofiee/Omise-Go-Example/app/controllers"
-	"github.com/aofiee/Omise-Go-Example/app/models"
+	"Omise-Go-Example/app/controllers"
+	"Omise-Go-Example/app/models"
 	"github.com/revel/revel/testing"
 )
 
