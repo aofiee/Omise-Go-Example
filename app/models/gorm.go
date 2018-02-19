@@ -18,12 +18,12 @@ var (
 // InitDB var
 func InitDB() {
 	driver := revel.Config.StringDefault("db.driver", "mysql")
-	username := revel.Config.StringDefault("db.username", "root")
-	password := revel.Config.StringDefault("db.password", "root")
+	username := revel.Config.StringDefault("db.username", "waller")
+	password := revel.Config.StringDefault("db.password", "pxSeEAZ4E")
 	protocol := revel.Config.StringDefault("db.protocol", "tcp")
 	hostname := revel.Config.StringDefault("db.hostname", "localhost")
 	port := revel.Config.StringDefault("db.port", "3306")
-	dbName := revel.Config.StringDefault("db.database_name", "wallet")
+	dbName := revel.Config.StringDefault("db.database_name", "waller")
 	timezone := revel.Config.StringDefault("db.timezone", "UTC")
 	charset := revel.Config.StringDefault("db.charset", "utf8")
 	collation := revel.Config.StringDefault("db.collation", "utf8_bin")

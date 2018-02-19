@@ -6,6 +6,7 @@ import (
 
 	"Omise-Go-Example/app/controllers"
 	"Omise-Go-Example/app/models"
+
 	"github.com/revel/revel/testing"
 )
 
