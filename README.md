@@ -5,12 +5,22 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 ### Reproducible Installations
 Install the dependencies and revisions listed in the lock file into the vendor directory. If no lock file exists an update is run.
 
+```
 $ glide install
+```
 
+or
+
+```
+docker run --rm -it -v $(pwd):/go/src/omise-go -w /go/src/omise-go instrumentisto/glide install
+```
 
 ### Start the web server:
 
-   revel run github.com/aofiee666/OmiseWallet
+```
+docker-compose build
+docker-compose up -d
+```
 
 ### Go to http://localhost:9000/ and you'll see:
 
