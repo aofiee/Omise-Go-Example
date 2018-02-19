@@ -7,7 +7,7 @@ services:
     volumes:
       - type: bind
         source: ./
-        target: /go/src/omise-go
+        target: /go/src/Omise-Go-Example
     links:
       - db
     command: revel run Omise-Go-Example
