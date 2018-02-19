@@ -1,3 +1,5 @@
+#ทดสอบ Go-Lang กับ API ของ Omise
+
 # Welcome to Revel
 
 A high-productivity web framework for the [Go language](http://www.golang.org/).
@@ -28,7 +30,7 @@ docker-compose up -d
 | -------------|-------------|
 | admin        | password    |
 
-![alt text](https://OmiseWallet/blob/master/public/img/loginScreen.png?raw=true)
+![alt text](https://github.com/aofiee/Omise-Go-Example/blob/master/public/img/loginScreen.png?raw=true)
 
 
 ## Code Layout
@@ -43,6 +45,7 @@ The directory structure of a generated Revel application:
         init.go       Interceptor registration
         controllers/  App controllers go here
         views/        Templates directory
+        models/       Type Struct
 
     messages/         Message files
 
