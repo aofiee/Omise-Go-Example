@@ -40,7 +40,7 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/aofiee666/OmiseWallet/app/models"
+	"github.com/aofiee/Omise-Go-Example/app/models"
 	"github.com/revel/revel"
 )
 
