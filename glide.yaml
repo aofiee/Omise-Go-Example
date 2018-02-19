@@ -1,4 +1,4 @@
-package: github.com/aofiee666/OmiseWallet
+package: github.com/aofiee/Omise-Go-Example
 import:
 - package: github.com/jinzhu/gorm
   version: ^1.0.0
