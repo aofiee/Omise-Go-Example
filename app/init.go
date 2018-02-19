@@ -1,7 +1,7 @@
 package app
 
 import (
-	"github.com/aofiee/Omise-Go-Example/app/models"
+	"Omise-Go-Example/app/models"
 	"github.com/revel/revel"
 )
 

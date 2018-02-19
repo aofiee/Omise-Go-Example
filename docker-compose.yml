@@ -4,9 +4,13 @@ services:
     build: ./
     ports:
       - 80:9000
+    volumes:
+      - type: bind
+        source: ./
+        target: /go/src/Omise-Go-Example
     links:
       - db
-    command: revel run omise-go
+    command: revel run Omise-Go-Example
   db:
     image: mysql:5.7
     volumes:

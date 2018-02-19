@@ -28,7 +28,7 @@ docker-compose up -d
 | -------------|-------------|
 | admin        | password    |
 
-![alt text](https://github.com/aofiee/OmiseWallet/blob/master/public/img/loginScreen.png?raw=true)
+![alt text](https://OmiseWallet/blob/master/public/img/loginScreen.png?raw=true)
 
 
 ## Code Layout

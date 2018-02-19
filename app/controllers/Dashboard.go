@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/aofiee/Omise-Go-Example/app/models"
+	"Omise-Go-Example/app/models"
 	omise "github.com/omise/omise-go"
 	"github.com/omise/omise-go/operations"
 
