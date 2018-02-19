@@ -1,4 +1,4 @@
-#ทดสอบ Go-Lang กับ API ของ Omise
+# ทดสอบ Go-Lang กับ API ของ Omise
 
 # Welcome to Revel
 
