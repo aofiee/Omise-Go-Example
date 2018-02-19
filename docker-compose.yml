@@ -3,5 +3,31 @@ services:
   app:
     build: ./
     ports:
-      - 9000:9000
+      - 80:9000
+    links:
+      - db
     command: revel run omise-go
+  db:
+    image: mysql:5.7
+    volumes:
+      - type: volume
+        source: mysql-data
+        target: /var/lib/mysql
+        volume:
+          nocopy: true
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=waller
+      - MYSQL_USER=waller
+      - MYSQL_PASSWORD=pxSeEAZ4E
+  pma:
+    image: nazarpc/phpmyadmin:latest
+    environment:
+      - UPLOAD_SIZE=1G
+    links:
+      - db:mysql
+    ports:
+      - 9090:80
+volumes:
+  mysql-data:
+    driver: local
