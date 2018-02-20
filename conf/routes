@@ -11,13 +11,14 @@ GET     /                                       App.Index
 POST    /Login                                  App.Login
 GET     /Dashboard                              Dashboard.Index
 GET     /Logout                                 Dashboard.Logout
-GET     /Publickey                              Dashboard.PublicKey
-POST    /UpdateKey                              Dashboard.UpdateKey
-GET     /DefaultBank                            Dashboard.DefaultBank
-POST    /UpdateDefaultBank                      Dashboard.UpdateDefaultBank
-GET     /ListAllRecipient                       Dashboard.ListAllRecipient
-GET     /NewRecipientForm                       Dashboard.NewRecipientForm
-POST    /SaveNewRecipient                       Dashboard.SaveNewRecipient
+GET     /Publickey                              Settings.PublicKey
+POST    /UpdateKey                              Settings.UpdateKey
+GET     /DefaultBank                            Settings.DefaultBank
+POST    /UpdateDefaultBank                      Settings.UpdateDefaultBank
+GET     /ListAllRecipient                       Settings.ListAllRecipient
+GET     /NewRecipientForm                       Settings.NewRecipientForm
+POST    /SaveNewRecipient                       Settings.SaveNewRecipient
+GET     /SetDefaultBank/:bankid                 Settings.SetDefaultBank
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
