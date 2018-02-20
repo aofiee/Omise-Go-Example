@@ -1,0 +1,51 @@
+{{template "Dashboard/header.html" .}}
+<div class="p-3 mb-2 bg-danger text-white">{{.flash.error}}</div>
+<div class="p-3 mb-2 bg-success text-white">{{.flash.success}}</div>
+<div class="container">
+    <h2>List All Recipient</h2>
+    <p>สายลม version นั่งเล่น หน้าบ้าน</p>            
+    <button type="button" id="newRecipient" class="btn btn-primary">New Recipient</button>
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Type</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+{{range $index, $element := .sliceRecipient}}
+
+<tr>
+        <td>{{$element.Name}}</td>
+        <td>{{$element.Email}}</td>
+        <td>{{$element.Type}}</td>
+        <td>
+                <div class="btn-group">
+                        {{if $element.IsDefault}}
+                        <button type="button" class="btn btn-primary make-default-bank" onclick="makeDefaultBank('{{$element.ID}}')">Make Default</button>
+                        {{else}}
+                        <button type="button" class="btn btn-default" onclick="makeDefaultBank('{{$element.ID}}')">Make Default</button>
+                        {{end}}
+                        <button type="button" class="btn btn-info">List Transfer</button>
+                        <button type="button" class="btn btn-success">Update</button>
+                        <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+        </td>
+    </tr>
+{{end}}
+        </tbody>
+    </table>
+</div>
+<script>
+$(document).ready( function() {
+    $('#newRecipient').click(function() {
+        window.location = "/NewRecipientForm";
+    });
+ });
+ function makeDefaultBank(id){
+     window.location = "/SetDefaultBank/"+id;
+ }
+</script>
+{{template "footer.html" .}}

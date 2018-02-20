@@ -1,0 +1,24 @@
+{{template "Dashboard/header.html" .}}
+<!-- Main Content -->
+    <div class="container-fluid">
+        <div class="side-body">
+           <h1> Public Key & Secret Key </h1>
+           <pre> Omise API Keys </pre>
+           <div class="p-3 mb-2 bg-danger text-white">{{.flash.error}}</div>
+           <form id="login-form" action="/UpdateKey" method="post" role="form" style="display: block;">
+           <div class="form-group">
+                <label for="usr">Public Key:</label>
+                <input type="text" class="form-control" id="publickey" name="publickey" value="{{.publickey}}">
+                <div>The public key can be used to create tokens via javascript from your customers browsers. This key can be safely exposed to the outside world.</div>
+              </div>
+              <div class="form-group">
+                <label for="pwd">Secret Key:</label>
+                <input type="text" class="form-control" id="secretkey" name="secretkey" value="{{.secretkey}}">
+                <div>The secret key can be used to create customers, cards and charges and to retrieve information about your account, such as its balance. You must keep this key from prying eyes.</div>
+            </div>
+            <input type="submit" class="btn btn-info" value="Save Button">
+            </form>
+        </div>
+    </div>
+</div>
+{{template "footer.html" .}}
