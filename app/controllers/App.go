@@ -150,3 +150,14 @@ func (c App) getPublicAndSecretKey() (publickey string, secretkey string) {
 	secretkey = omiseKey.SecretKey
 	return publickey, secretkey
 }
+
+//getIsDefaultBankFromOmiseID func
+func (c App) getIsDefaultBankFromOmiseID(omiseID string) (IsDefault int) {
+	db := models.Gorm
+	var recipient models.Recipient
+	db.Where("omise_id = ?", omiseID).First(&recipient)
+	if recipient.ID != 0 {
+		return recipient.IsDefault
+	}
+	return
+}

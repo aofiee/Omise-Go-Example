@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"Omise-Go-Example/app/models"
+
 	omise "github.com/omise/omise-go"
 	"github.com/omise/omise-go/operations"
 
@@ -264,6 +265,14 @@ func recipientSaveInOmise(recipient models.Recipient) bool {
 	return true
 }
 
+type recipientFormat struct {
+	ID        string
+	Name      string
+	Email     string
+	Type      string
+	IsDefault int
+}
+
 //ListAllRecipient func
 func (c Dashboard) ListAllRecipient() revel.Result {
 	myName := strings.Title(c.Session["username"])
@@ -282,12 +291,21 @@ func (c Dashboard) ListAllRecipient() revel.Result {
 	   |                                                                              |
 	   +------------------------------------------------------------------------------+
 	*/
-	var sliceRecipient []*omise.Recipient
-
+	//var sliceRecipient []*omise.Recipient
+	var sliceRecipient []recipientFormat
 	for _, item := range recipients.Data {
-		sliceRecipient = append(sliceRecipient, item)
+
+		r := recipientFormat{
+			ID:        item.ID,
+			Name:      item.Name,
+			Email:     item.Email,
+			Type:      string(item.Type),
+			IsDefault: c.getIsDefaultBankFromOmiseID(item.ID),
+		}
+		// sliceRecipient = append(sliceRecipient, item)
+		sliceRecipient = append(sliceRecipient, r)
 	}
-	fmt.Println(sliceRecipient)
+	fmt.Println("sliceRecipient", sliceRecipient)
 	return c.Render(myName, sliceRecipient)
 }
 
